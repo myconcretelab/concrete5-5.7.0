@@ -32,10 +32,12 @@ abstract class Snippet extends Object {
 		$r = $db->GetRow('select scsHandle, scsIsActive, pkgID, scsName from SystemContentEditorSnippets where scsHandle = ?', array($scsHandle));
 		if (is_array($r) && $r['scsHandle']) {
 			$pkgHandle = false;
+			$txt = Loader::helper('text');
 			if ($r['pkgID']) {
 				$pkgHandle = PackageList::getHandle($r['pkgID']);
+				$class = '\\Concrete\\Package\\' . PackageList::getHandle($r['pkgID']) . '\\Editor\\' . $txt->camelcase($r['scsHandle']) . 'Snippet';
 			}
-			$txt = Loader::helper('text');
+
 			$class = '\\Concrete\\Core\\Editor\\' . $txt->camelcase($r['scsHandle']) . 'Snippet';
 			$sc = Core::make($class);
 			$sc->setPropertiesFromArray($r);
